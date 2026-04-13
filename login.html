@@ -1,34 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Login - Help Desk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    /* Mantendo seus estilos originais */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+    body { height: 100vh; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; align-items: center; justify-content: center; color: #fff; }
+    .login-box { background: #1e293b; padding: 40px; border-radius: 12px; width: 100%; max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .login-box h2 { text-align: center; margin-bottom: 25px; }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { font-size: 14px; display: block; margin-bottom: 5px; }
+    .input-group input { width: 100%; padding: 10px; border-radius: 6px; border: none; outline: none; background: #334155; color: #fff; }
+    .input-group input:focus { border: 1px solid #38bdf8; }
+    .btn-login { width: 100%; padding: 12px; border: none; border-radius: 6px; background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .btn-login:hover { background: #0ea5e9; }
+    .error { color: #f87171; font-size: 13px; text-align: center; margin-top: 10px; }
+    .footer { text-align: center; font-size: 12px; margin-top: 15px; color: #94a3b8; }
+  </style>
 </head>
 <body>
-  <h2>Login</h2>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Senha" required />
-    <button type="submit">Entrar</button>
-  </form>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <div class="login-box">
+    <h2>🔐 Help Desk</h2>
+    <div class="input-group">
+      <label>E-mail</label>
+      <input type="email" id="user" placeholder="seu@email.com">
+    </div>
+    <div class="input-group">
+      <label>Senha</label>
+      <input type="password" id="pass">
+    </div>
+    <button class="btn-login" onclick="login()">Entrar</button>
+    <div class="error" id="error"></div>
+    <div class="footer">Sistema de Chamados TI</div>
+  </div>
+
   <script>
-    const supabaseUrl = "https://dadoqlfentlwxofyfndh.supabase.co";
-    const supabaseAnonKey = "SUA_CHAVE_PUBLICA_ANON";
-    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // Inicialização do Supabase com suas credenciais
+    const supabase = libsupabase.createClient(
+      "https://dadoqlfentlwxofyfndh.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhZG9xbGZlbnRsd3hvZnlmbmRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNTA0NzEsImV4cCI6MjA5MDYyNjQ3MX0.p8g25Ab0GN4QljJz0zvU_ZJ1i4ctjodxZACvr-sMikQ"
+    );
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    async function login() {
+      const email = document.getElementById("user").value;
+      const senha = document.getElementById("pass").value;
+      const errorDiv = document.getElementById("error");
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: senha
+      });
+
       if (error) {
-        alert('Erro no login: ' + error.message);
+        errorDiv.innerText = "Erro: " + error.message;
       } else {
-        window.location.href = 'index.html';
+        // Redireciona para a página principal após login sucesso
+        window.location.href = "helpdesk5.html";
       }
-    });
+    }
   </script>
 </body>
 </html>
